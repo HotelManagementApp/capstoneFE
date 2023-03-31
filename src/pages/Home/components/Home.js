@@ -92,7 +92,7 @@ const Home = () => {
 
             <div className="container">
               <div className="row justify-content-md-center my-row py-4">
-                  <div className="card col-lg-6 col-sm-12 ">
+                  <div className="card col-lg-6 col-sm-12 food-card">
                   <img src={pic7} alt="" className="food pt-4" />
                   <p className="text-dark fs-5 lh-sm">
                     Lorem ipsum dolor sit amet. Aut ullam ipsam et doloremque dolores ut
@@ -100,8 +100,8 @@ const Home = () => {
                     tenetur adipisci aut debitis temporibus.
                  </p>
                   </div>
-                  <div className="card col-lg-6 col-sm-12 p-4">
-                  <img src={pic8} alt="" className="food"/>
+                  <div className="card col-lg-6 col-sm-12 p-4 food-card">
+                  <img src={pic8} alt="" className="food" id="food2"/>
                   <p className="text-dark fs-5 lh-sm">
                     Lorem ipsum dolor sit amet. Aut ullam ipsam et doloremque dolores ut
                     iste rerum qui ipsa corrupti. Eum impedit incidunt sit quis rerum 33

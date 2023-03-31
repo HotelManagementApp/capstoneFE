@@ -2,6 +2,11 @@ import React from 'react';
 import RoomCard from '../../RoomCard/components/roomCard';
 import Button from '../../../components/button';
 import "../styles/rooms.css";
+import { useState, useEffect } from 'react';
+// import { RoomContents } from '../../../Rooms';
+import room10 from "../../../asset/executive-room2.jpg";
+
+
 import room1 from "../../../asset/normal-single_room.jpeg";
 import room2 from "../../../asset/one-man-executive.jpg";
 import room3 from "../../../asset/Double_room.jpeg";
@@ -11,37 +16,45 @@ import room6 from "../../../asset/single-executive.jpg";
 import room7 from "../../../asset/twin-room.jpg";
 import room8 from "../../../asset/family room.jpg";
 import room9 from "../../../asset/couple-room.jpg";
-import room10 from "../../../asset/executive-room2.jpg";
-
 
 
 
 const Rooms = () =>{
+    const [searchRooms,setSearchRooms] = useState ([])
+  
+
+    const handleSearchChange = (event)=>{
+        let roomTypes = event.target.value.toLowerCase();
+    
+
+        let result =(roomContents.filter(rm => rm.roomType.toLowerCase().includes(roomTypes)));
+        setSearchRooms(result)
+    }
 
     let roomContents = [
         {
             id:1,
-            roomType:"Single Room",
+            roomType:"single room",
             price:"#20,000 per night",
             img:room1,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:2,
-            roomType:"Single Executive Room",
+            roomType:"single executive room",
             price:"#50,000 per night",
             img:room2,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:3,
-            roomType:"Double Room",
+            roomType:"double room",
             price:"#70,000 per night",
             img:room3,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:4,
@@ -49,50 +62,59 @@ const Rooms = () =>{
             price:"#20,000",
             img:room4,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:5,
-            roomType:"Double Executive Room",
+            roomType:"double executive room",
             price:"#200,000",
             img:room5,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:6,
-            roomType:"Single Special Room",
+            roomType:"single special room",
             price:"#40,000",
             img:room6,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:7,
-            roomType:"Apartment Room",
+            roomType:"apartment room",
             price:"#200,000 per night",
             img:room7,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:8,
-            roomType:"Family Room",
+            roomType:"family room",
             price:"#100,000",
             img:room8,
             desc:"The room is a personal room and has all the comfort"
-
+    
         },
         {
             id:9,
-            roomType:"Single Couple Room",
+            roomType:"single couple room",
             price:"#50,000 per night",
             img:room9,
             desc:"The room is a personal room and has all the comfort"
-
+    
         }
     ]
-    // {img,roomType,price,desc}
+
+
+    
+    useEffect(() => {
+    
+     setSearchRooms(roomContents)
+        
+    }, [])
+
+
     return(
         <>
             <div className="container-fluid Hero-section">
@@ -106,18 +128,14 @@ const Rooms = () =>{
 
              <div className="container my-5">
                 <div className='row mx-4'>
-                    <div className='col-8'>
-                        <div class="input-group">
-                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                            <button type="button" class="btn btn-outline-primary">search</button>
-                        </div>
-                    </div>
+                    <input type="search" className="search-rooms" placeholder="Search room types" 
+                    value={searchRooms.roomType} onChange={handleSearchChange}/>
+                   
                     
                 </div>
-
              
 
-             <p className="text-dark text-center fs-3 py-2 fw-4">
+             <p className="text-dark text-center fs-3 py-2 fw-4 mt-3">
                 We keep your peace as we give you comfort.
             </p>
             <div className="text-center center-text">
@@ -128,16 +146,16 @@ const Rooms = () =>{
               </p>
             </div>
 
-            <div className="row gy-3 gx-3">
-                {
-                    roomContents.map((item,index) =>{
-                        return(
-                            <RoomCard key={index} img={item.img} roomType={item.roomType} price={item.price} desc ={item.desc} />
-                        )
-                    })
-                }
-            </div>
-        </div>
+    <div className="row gy-3 gx-3 container-card">
+        {
+            searchRooms.map((item,index) =>{
+                return(
+                    <RoomCard key={index} img={item.img} roomType={item.roomType} price={item.price} desc ={item.desc} />
+                )
+            })
+        }
+    </div>
+</div>
 
         </>
         

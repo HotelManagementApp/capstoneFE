@@ -10,4 +10,14 @@
 }
 #room-card{
     width: 405px !important;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    transition: transform 0.25 ease-out;
+
 }
+#room-card:hover{
+    cursor: pointer;
+   transform: scale(1.06);
+    
+}
+

@@ -8,18 +8,18 @@
 }
 .title{
     font-size: 60px;
-    font-weight: 700;
-    font-family:'Times New Roman', Times, serif
+    font-weight: 900;
+    
+    /* font-family:'Times New Roman', Times, serif */
 }
 .center-text{
     width: 50%;
     text-align: center;
     margin-left: 25%;
 }
-.my-row{
-    /* border: 1px solid black; */
-    /* height: 10rem; */
-}
-.food{
-    height: 320px;
+
+
+.food-card:hover{
+    cursor: pointer;
+    transform: scale(1.06);
 }

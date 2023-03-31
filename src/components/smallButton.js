@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigate } from 'react-router-dom';
 
-const Button = () => {
+const SmallButton = () => {
     const navigate = useNavigate()
 
     const navToBooking = () =>{
@@ -10,7 +10,7 @@ const Button = () => {
         )
     }
     return (
-        <button type="button" onClick={navToBooking} class="btn btn-danger w-25">Book now</button>
+        <button type="button" onClick={navToBooking} class="btn btn-danger">Book now</button>
     );
 }
-export default Button;
+export default SmallButton;

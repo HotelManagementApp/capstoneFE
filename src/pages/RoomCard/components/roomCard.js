@@ -1,3 +1,5 @@
+
+import SmallButton from "../../../components/smallButton";
 import "../style/style.css"
 
 const RoomCard = ({img,roomType,price,desc}) =>{
@@ -12,7 +14,7 @@ const RoomCard = ({img,roomType,price,desc}) =>{
                         <h5 className="card-title">{roomType}</h5>
                         <p className="card-text">{desc}</p>
                         <p className="card-text">{price}</p>
-                        <a href="/" className="btn btn-danger">Book now</a>
+                        <SmallButton/>
                     </div>
                 </div>
 
