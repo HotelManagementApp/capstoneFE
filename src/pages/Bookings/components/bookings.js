@@ -150,10 +150,10 @@ const [descError,setDescError] = useState("")
 const [paymentSuccess,setPaymentSuccess] = useState("")
 const [paymentError,setPaymentError] = useState("")
 const validatePayment = () =>{
-    if(userData.name !== bookingData.firstName && bookingData.lastName){
-        setErrorMessage("name must match the one used for booking!!")
+    if(userData.name !== bookingData.firstName){
+        setPaymentError("name must match the one used for booking!!")
     }else{
-      setErrorMessage("")
+      setPaymentError("")
     }
     if(userData.amount !== typeof(Number)){
         setAmountError("this is an invalid input")
