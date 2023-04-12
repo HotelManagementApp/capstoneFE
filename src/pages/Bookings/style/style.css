@@ -7,3 +7,10 @@
 .pt-7{
     margin-top: 7%;
 }
+.error{
+    color: red;
+    font-size: 12px;
+}
+.success{
+    color: green;
+}

@@ -1,8 +1,20 @@
 
-import SmallButton from "../../../components/smallButton";
+// import SmallButton from "../../../components/smallButton";
 import "../style/style.css"
+import { useNavigate } from "react-router-dom";
 
 const RoomCard = ({img,roomType,price,desc}) =>{
+    const navigate = useNavigate()
+    const navToBooking = () =>{
+    
+        return(
+            navigate("/Bookings",{
+                state: {
+                    room:roomType
+                }
+            })
+        )
+    }
 
     return(
         <>
@@ -14,7 +26,7 @@ const RoomCard = ({img,roomType,price,desc}) =>{
                         <h5 className="card-title">{roomType}</h5>
                         <p className="card-text">{desc}</p>
                         <p className="card-text">{price}</p>
-                        <SmallButton/>
+                        <button type="button" onClick={navToBooking} class="btn btn-danger">Book now</button>
                     </div>
                 </div>
 

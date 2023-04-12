@@ -1,7 +1,8 @@
 import React from "react";
 import "../style/style.css";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const Bookings = () => {
   // cancel booking api
@@ -9,10 +10,14 @@ const Bookings = () => {
     guestId: "",
   });
 
+  const location = useLocation()
+  const roomType = location.state.room
+  
+
   const handleSubmitCancel = (e) =>{
     e.preventDefault();
     try{
-      axios.delete("http://localhost:8080/capstoneHotels/cancelBooking" + bookingData.id,
+      axios.delete("http://localhost:8080/capstoneHotels/cancelBooking/" + bookingData.guestId,
       cancelData)
       .then((response) => {
           console.log(response.data)
@@ -51,9 +56,61 @@ const Bookings = () => {
   });
 
 
-  const handleSubmit2 = (e) => {
-    e.preventDefault();
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const validNumber = /^\d{11}$/;
+  const validName = /^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$/;
 
+  const [errorMessage, setErrorMessage] = useState("")
+  const [emailError, setEmailError] = useState("")
+  const [phoneError, setPhoneError] = useState("")
+  const [successMessage,setSuccessMessage] = useState("")
+  const [checkDate,setCheckDate] = useState("")
+  const [bookingSuccess,setBookingSuccess] = useState("")
+  const [bookingError,setBookingError] = useState("")
+
+  const approveMessage = () =>{
+    setSuccessMessage("Successful")
+  }
+
+  const validate = () =>{
+    if(!validName.test(bookingData.firstName)){
+     setErrorMessage("Invalid name!!")
+     
+    }else{
+      setErrorMessage("")
+    }
+    if(!validName.test(bookingData.lastName)){
+      setErrorMessage("Invalid name!!")
+     
+    }else{
+      setErrorMessage("")
+    }
+     
+    if(!validEmail.test(bookingData.emailAddress)){
+      setEmailError("invalid email!!")
+     
+    }else{
+      setEmailError("")
+    }
+     if(!validNumber.test(bookingData.telephoneNumber)){
+      setPhoneError("invalid phone number!!")
+     }else{
+      setPhoneError("")
+     }
+     if(bookingData.checkoutDate < bookingData.checkinDate){
+        setCheckDate("invalid booking date")
+
+     }else{
+        setCheckDate("")
+       
+     }
+     
+  }
+ 
+  const handleSubmit2 = (e) => {
+    validate();
+    approveMessage()
+    e.preventDefault();
     try {
       axios
         .post(
@@ -61,7 +118,13 @@ const Bookings = () => {
           bookingData
         )
         .then((response) => {
-          
+          if(response.status === HttpStatusCode.Ok){
+            setBookingSuccess("room booked,proceed to pay")
+          }else{
+            setBookingSuccess("")
+            setBookingError("An error occured,try again!!")
+          }
+         
           console.log(response.data);
         });
       console.log(bookingData);
@@ -70,6 +133,7 @@ const Bookings = () => {
       console.log(error.response);
     }
   };
+
   const handleChange2 = (event) => {
     const { name, value } = event.target;
     setBookingData((prevData) => {
@@ -81,7 +145,33 @@ const Bookings = () => {
   };
 //Payment api
 
+const [amountError,setAmountError] = useState("")
+const [descError,setDescError] = useState("")
+const [paymentSuccess,setPaymentSuccess] = useState("")
+const [paymentError,setPaymentError] = useState("")
+const validatePayment = () =>{
+    if(userData.name !== bookingData.firstName && bookingData.lastName){
+        setErrorMessage("name must match the one used for booking!!")
+    }else{
+      setErrorMessage("")
+    }
+    if(userData.amount !== typeof(Number)){
+        setAmountError("this is an invalid input")
+    }else{
+      setAmountError("")
+    }
+    if(userData.description !== typeof(String)){
+      setDescError("this is an invalid description")
+    }else{
+      setDescError("")
+    }
+}
+
+
   const handleSubmit = (e) => {
+
+    validatePayment()
+  
     e.preventDefault();
     try {
       axios
@@ -90,12 +180,18 @@ const Bookings = () => {
           userData
         )
         .then((response) => {
+          if(response.status === HttpStatusCode.Ok){
+            setPaymentSuccess("payment made successfully")
+          }else{
+            setPaymentSuccess("")
+            setPaymentError("something went wrong,try again!!")
+          }
           console.log(response.data);
         });
     } catch (error) {
       console.log(error.response);
     }
-    // console.log(userData)
+   
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -126,7 +222,7 @@ const Bookings = () => {
                 onChange={handleChange2}
                 required
               />
-             
+              <p className="error">{errorMessage}</p>
             </div>
             <div className="mb-3">
               <label htmlfor="validationTooltip02"
@@ -142,7 +238,7 @@ const Bookings = () => {
                 onChange={handleChange2}
                 required
               />
-               
+                <p className="error">{errorMessage}</p>
             </div>
             <div className="mb-3">
               <label className="form-label">Email address</label>
@@ -159,6 +255,7 @@ const Bookings = () => {
                 onChange={handleChange2}
                 required
               />
+               <p className="error">{emailError}</p>
               {/* <div id="email" className="form-text">We'll never share your email with anyone else.</div> */}
             </div>
             <div className="mb-3">
@@ -174,7 +271,7 @@ const Bookings = () => {
                 onChange={handleChange2}
                 required
               />
-              
+                <p className="pt-3 error">{phoneError}</p>
             </div>
             {/* <div className="col-4 my-4">
               <div className="dropdown">
@@ -252,7 +349,7 @@ const Bookings = () => {
                 id="roomType"
                 placeholder="SINGLE"
                 aria-describedby="roomType"
-                value={bookingData.roomType}
+                value={roomType}
                 onChange={handleChange2}
                 required
               />
@@ -279,11 +376,14 @@ const Bookings = () => {
                 onChange={handleChange2}
                 required
               />
+               <p className="pt-3 error">{checkDate}</p>
             </div>
 
             <button type="submit" className="btn btn-danger">
               Proceed to pay
             </button>
+             <p className="success">{bookingSuccess}</p>
+             <p className="error">{bookingError}</p>
           </form>
           <div className="mt-5"></div>
           {/* <h5>Enter Second Guest Information</h5>
@@ -398,6 +498,7 @@ const Bookings = () => {
                       onChange={handleChange}
                       required
                     />
+                    <div className="error">{amountError}</div>
                   </div>
                   <div className="col-6 mb-3">
                     <label className="form-label">Description</label>
@@ -410,6 +511,7 @@ const Bookings = () => {
                       onChange={handleChange}
                       required
                     />
+                    <div className="error">{descError}</div>
                   </div>
                   
                  
@@ -418,6 +520,8 @@ const Bookings = () => {
                 <button type="submit" className="btn btn-danger mb-3">
                   Pay Now
                 </button>
+                <p className="success">{paymentSuccess}</p>
+             <p className="error">{paymentError}</p>
               </form>
             </div>
             {/* cancel booking */}
@@ -444,6 +548,7 @@ const Bookings = () => {
                 <button type="submit" className="btn btn-danger mb-3">
                   Cancel Booking
                 </button>
+                <p className="pt-3 success">{paymentSuccess}</p>
               </form>
               
             </div>

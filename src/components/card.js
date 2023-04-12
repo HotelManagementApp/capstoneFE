@@ -52,7 +52,7 @@ const Card = () =>{
                       <div className="card">
                               <img src={pic4} className="card-img-top" alt="..."/>
                               <div className="card-body">
-                                <h5 className="card-title">Card title</h5>
+                                <h5 className="card-title">Comfortable Rooms</h5>
                                 <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 <a href="/" className="btn btn-danger">Book now</a>
                               </div>
@@ -61,7 +61,7 @@ const Card = () =>{
                         <div className="card">
                             <img src={pic5} className="card-img-top" alt="..."/>
                             <div className="card-body">
-                              <h5 className="card-title">Card title</h5>
+                              <h5 className="card-title">Gym Space</h5>
                               <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                               <a href="/" className="btn btn-danger">Book now</a>
                             </div>
@@ -69,7 +69,7 @@ const Card = () =>{
                          <div className="card">
                             <img src={pic6} className="card-img-top" alt="..."/>
                             <div className="card-body">
-                              <h5 className="card-title">Card title</h5>
+                              <h5 className="card-title">Spa Space</h5>
                               <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                               <a href="/" className="btn btn-danger">Book now</a>
                             </div>

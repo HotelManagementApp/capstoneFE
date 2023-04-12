@@ -34,7 +34,7 @@ const Rooms = () =>{
     let roomContents = [
         {
             id:1,
-            roomType:"single room",
+            roomType:"single",
             price:"#20,000 per night",
             img:room1,
             desc:"The room is a personal room and has all the comfort"
@@ -42,7 +42,7 @@ const Rooms = () =>{
         },
         {
             id:2,
-            roomType:"single executive room",
+            roomType:"single executive",
             price:"#50,000 per night",
             img:room2,
             desc:"The room is a personal room and has all the comfort"
@@ -58,7 +58,7 @@ const Rooms = () =>{
         },
         {
             id:4,
-            roomType:"personal room",
+            roomType:"personal",
             price:"#20,000",
             img:room4,
             desc:"The room is a personal room and has all the comfort"
@@ -66,7 +66,7 @@ const Rooms = () =>{
         },
         {
             id:5,
-            roomType:"double executive room",
+            roomType:"double executive",
             price:"#200,000",
             img:room5,
             desc:"The room is a personal room and has all the comfort"
@@ -74,7 +74,7 @@ const Rooms = () =>{
         },
         {
             id:6,
-            roomType:"single special room",
+            roomType:"single special",
             price:"#40,000",
             img:room6,
             desc:"The room is a personal room and has all the comfort"
@@ -90,7 +90,7 @@ const Rooms = () =>{
         },
         {
             id:8,
-            roomType:"family room",
+            roomType:"family",
             price:"#100,000",
             img:room8,
             desc:"The room is a personal room and has all the comfort"
@@ -98,7 +98,7 @@ const Rooms = () =>{
         },
         {
             id:9,
-            roomType:"single couple room",
+            roomType:"single couple",
             price:"#50,000 per night",
             img:room9,
             desc:"The room is a personal room and has all the comfort"
@@ -150,7 +150,7 @@ const Rooms = () =>{
         {
             searchRooms.map((item,index) =>{
                 return(
-                    <RoomCard key={index} img={item.img} roomType={item.roomType} price={item.price} desc ={item.desc} />
+                    <RoomCard key={item.id} img={item.img} roomType={item.roomType} price={item.price} desc ={item.desc} />
                 )
             })
         }
