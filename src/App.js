@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './asset/app_logo.png';
 import './App.css';
 import { Route, Routes} from 'react-router-dom';
 import Home from "./pages/Home/components/Home";
@@ -22,7 +22,9 @@ function App() {
         <Route path={'/Contacts'} element={<Contacts/>}/>
      </Routes>
      <Footer/>
+     
     </>
+
   );
 }
 

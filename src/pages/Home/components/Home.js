@@ -6,7 +6,7 @@ import "../../Home/style/home.css";
 import Button from "../../../components/button";
 import Card from "../../../components/card";
 import pic7 from "../../../asset/new-food.avif"
-import pic8 from "../../../asset/food table2.avif"
+import pic8 from "../../../asset/food_table2.avif"
 
 const Home = () => {
   return (

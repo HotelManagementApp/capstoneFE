@@ -1,11 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import '../style/contacts.css'
 
-const Contacts = () =>{
-    return(
-        <div>
-            <h1>Contact</h1>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.119522852691!2d3.3762775149804067!3d6.5065512952934625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8c5f6e28522b%3A0x34bb7fdf47960f07!2s312%20Herbert%20Macaulay%20Way%2C%20Sabo%20yaba%20101245%2C%20Lagos!5e0!3m2!1sen!2sng!4v1679587750683!5m2!1sen!2sng" width="600" height="450" style={{border:"0"}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title='google map'></iframe>
-        </div>
-    );
+function Contacts() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div>
+      <h1>Contact Us</h1>
+      <br/>
+      <p>Please fill out the form below to contact us.</p>
+      <br/>
+      <p>You will get an email from us as early as an hour after submission</p>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        </label>
+        <label>
+          Email:
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <label>
+          Message:
+          <textarea value={message} onChange={(e) => setMessage(e.target.value)} />
+        </label>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
 }
+
 export default Contacts;
