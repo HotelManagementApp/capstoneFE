@@ -207,7 +207,7 @@ const Bookings = () => {
       //   }
       //   console.log(response.data);
       // });
-      alert("Payment succesful");
+      alert("Payment succesful. Please check your email for your booking Id");
     } catch (error) {
       console.log(error.response);
     }

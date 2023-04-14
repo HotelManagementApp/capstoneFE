@@ -36,18 +36,20 @@ const Navbar = () => {
                   <Link to="/contacts" className="nav-item nav-link">
                     Contacts
                   </Link>
-                  <Link
+                  {/* <Link
                     to="/bookings"
                     className="nav-item nav-link book bg-danger rounded-pill"
                   >
                     Book Online
-                  </Link>
+                  </Link> */}
                 </div>
+            
               </div>
             </div>
           </div>
         </div>
       </div>
+     
     </>
   );
 };

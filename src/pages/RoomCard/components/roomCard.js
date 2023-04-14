@@ -27,7 +27,7 @@ const RoomCard = ({img,roomType,price,desc}) =>{
                         <h5 className="card-title">{roomType}</h5>
                         <p className="card-text">{desc}</p>
                         <p className="card-text">{price}</p>
-                        <button type="button" onClick={navToBooking} class="btn btn-danger">Book now</button>
+                        <button type="button" onClick={navToBooking} class="btn btn-danger">Book this room</button>
                     </div>
                 </div>
 

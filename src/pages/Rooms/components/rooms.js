@@ -28,7 +28,7 @@ const Rooms = () => {
     );
     setSearchRooms(result);
   };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   let roomContents = [
     {
@@ -107,7 +107,7 @@ const Rooms = () => {
         <div class="carousel-caption d-none d-md-block top">
           <h1 className="title">ROOMS & SUITES</h1>
           <p className="fs-2">We Give More Than What You Ask ; A Home.</p>
-          <Button />
+          {/* <Button /> */}
         </div>
       </div>
 
