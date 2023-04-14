@@ -10,7 +10,8 @@ const RoomCard = ({img,roomType,price,desc}) =>{
         return(
             navigate("/Bookings",{
                 state: {
-                    room:roomType
+                    room:roomType,
+                    amount: price
                 }
             })
         )

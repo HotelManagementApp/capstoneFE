@@ -5,26 +5,39 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const Bookings = () => {
-  // cancel booking api
-  const [cancelData,setCancelData] = useState({
-    guestId: "",
+  const [minDate, setMinDate] = useState(() => {
+    const today = new Date().toISOString().split("T")[0];
+    return today;
   });
 
-  const location = useLocation()
-  const roomType = location.state.room
-  
+  // cancel booking api
+  const [cancelData, setCancelData] = useState({
+    guestId: "",
+  });
+  const [cancelResponse, setCancelResponse] = useState("");
 
-  const handleSubmitCancel = (e) =>{
+  const location = useLocation();
+  const roomTyp = location.state.room;
+  const roomPrice = location.state.amount;
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmitCancel = (e) => {
     e.preventDefault();
-    try{
-      axios.delete("http://localhost:8080/capstoneHotels/cancelBooking/" + bookingData.guestId,
-      cancelData)
-      .then((response) => {
-          console.log(response.data)
-      });
-      console.log(cancelData);
-    }catch(error){
-      console.log(error.response)
+    try {
+      axios
+        .delete(
+          "https://capstonehotels-production.up.railway.app/capstoneHotels/cancelBooking/"+
+            cancelData.guestId,
+          cancelData
+        )
+        .then((response) => {
+          console.log(response.data);
+          setCancelResponse(response.data.data.message);
+          alert(response.data.data.message);
+        });
+    } catch (error) {
+      console.log(error.response);
     }
   };
 
@@ -38,7 +51,7 @@ const Bookings = () => {
     });
   };
 
-// booking api
+  // booking api
   const [userData, setUserData] = useState({
     name: "",
     amount: "",
@@ -55,83 +68,99 @@ const Bookings = () => {
     roomType: "",
   });
 
-
+  const [paymentDetails, setPaymentDetails] = useState({
+    fullName: "",
+    amount: roomPrice,
+    phoneNumber: "",
+  });
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const validNumber = /^\d{11}$/;
   const validName = /^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$/;
 
-  const [errorMessage, setErrorMessage] = useState("")
-  const [emailError, setEmailError] = useState("")
-  const [phoneError, setPhoneError] = useState("")
-  const [successMessage,setSuccessMessage] = useState("")
-  const [checkDate,setCheckDate] = useState("")
-  const [bookingSuccess,setBookingSuccess] = useState("")
-  const [bookingError,setBookingError] = useState("")
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [bookingSuccess, setBookingSuccess] = useState("");
+  const [bookingError, setBookingError] = useState("");
+  const [descError, setDescError] = useState("");
+  const [paymentSuccess, setPaymentSuccess] = useState("");
+  const [paymentError, setPaymentError] = useState("");
+  const [checkDate, setCheckDate] = useState("");
 
-  const approveMessage = () =>{
-    setSuccessMessage("Successful")
-  }
+  const approveMessage = () => {
+    setSuccessMessage("Successful");
+  };
 
-  const validate = () =>{
-    if(!validName.test(bookingData.firstName)){
-     setErrorMessage("Invalid name!!")
-     
-    }else{
-      setErrorMessage("")
+  const validate = () => {
+    if (!validName.test(bookingData.firstName)) {
+      setErrorMessage("Invalid name!!");
+    } else {
+      setErrorMessage("");
     }
-    if(!validName.test(bookingData.lastName)){
-      setErrorMessage("Invalid name!!")
-     
-    }else{
-      setErrorMessage("")
+    if (!validName.test(bookingData.lastName)) {
+      setErrorMessage("Invalid name!!");
+    } else {
+      setErrorMessage("");
     }
-     
-    if(!validEmail.test(bookingData.emailAddress)){
-      setEmailError("invalid email!!")
-     
-    }else{
-      setEmailError("")
-    }
-     if(!validNumber.test(bookingData.telephoneNumber)){
-      setPhoneError("invalid phone number!!")
-     }else{
-      setPhoneError("")
-     }
-     if(bookingData.checkoutDate < bookingData.checkinDate){
-        setCheckDate("invalid booking date")
 
-     }else{
-        setCheckDate("")
-       
-     }
-     
-  }
- 
+    if (!validEmail.test(bookingData.emailAddress)) {
+      setEmailError("invalid email!!");
+    } else {
+      setEmailError("");
+    }
+    if (!validNumber.test(bookingData.telephoneNumber)) {
+      setPhoneError("invalid phone number!!");
+    } else {
+      setPhoneError("");
+    }
+    if (bookingData.checkoutDate < bookingData.checkinDate) {
+      setCheckDate("invalid booking date");
+    } else {
+      setCheckDate("");
+    }
+  };
+
   const handleSubmit2 = (e) => {
+    bookingData.roomType = roomTyp;
     validate();
-    approveMessage()
+    approveMessage();
     e.preventDefault();
-    try {
-      axios
-        .post(
-          "http://localhost:8080/capstoneHotels/bookRoom",
-          bookingData
-        )
-        .then((response) => {
-          if(response.status === HttpStatusCode.Ok){
-            setBookingSuccess("room booked,proceed to pay")
-          }else{
-            setBookingSuccess("")
-            setBookingError("An error occured,try again!!")
-          }
-         
-          console.log(response.data);
-        });
-      console.log(bookingData);
-      // console.log(userData)
-    } catch (error) {
-      console.log(error.response);
+    if (bookingData.checkoutDate > bookingData.checkinDate) {
+      try {
+        axios
+          .post("https://capstonehotels-production.up.railway.app/capstoneHotels/bookRoom", bookingData)
+          .then((response) => {
+            if (response.status === HttpStatusCode.Ok) {
+              setBookingSuccess(
+                "Room has been booked successfully, please proceed to payment"
+              );
+            } else {
+              setBookingSuccess("");
+              setBookingError("An error occured,try again!!");
+            }
+
+            console.log(response.data);
+            setCancelData(response.data.guestId);
+          });
+        console.log(bookingData);
+        // console.log(userData)
+      } catch (error) {
+        console.log(error.response);
+      }
     }
+    setPaymentDetails({
+      fullName: bookingData.firstName + " " + bookingData.lastName,
+      phoneNumber: bookingData.telephoneNumber,
+    });
+    setBookingData({
+      firstName: "",
+      lastName: "",
+      emailAddress: "",
+      checkinDate: "",
+      checkoutDate: "",
+      telephoneNumber: "",
+      roomType: bookingData.roomType,
+    });
   };
 
   const handleChange2 = (event) => {
@@ -143,55 +172,49 @@ const Bookings = () => {
       };
     });
   };
-//Payment api
+  //Payment api
 
-const [amountError,setAmountError] = useState("")
-const [descError,setDescError] = useState("")
-const [paymentSuccess,setPaymentSuccess] = useState("")
-const [paymentError,setPaymentError] = useState("")
-const validatePayment = () =>{
-    if(userData.name !== bookingData.firstName){
-        setPaymentError("name must match the one used for booking!!")
-    }else{
-      setPaymentError("")
-    }
-    if(userData.amount !== typeof(Number)){
-        setAmountError("this is an invalid input")
-    }else{
-      setAmountError("")
-    }
-    if(userData.description !== typeof(String)){
-      setDescError("this is an invalid description")
-    }else{
-      setDescError("")
-    }
-}
+  // const [amountError,setAmountError] = useState("")
 
+  const validatePayment = () => {
+    // if(userData.name != bookingData.firstName && userData.name != bookingData.lastName){
+    //     setPaymentError("name must match the one used for booking!!")
+    // }else{
+    //   setPaymentError("")
+    // }
+    // if(userData.description !== typeof(String)){
+    //   setDescError("this is an invalid description")
+    // }else{
+    //   setDescError("")
+    // }
+  };
 
   const handleSubmit = (e) => {
-
-    validatePayment()
-  
     e.preventDefault();
     try {
-      axios
-        .post(
-          "http://localhost:8080/capstoneHotels/makePayment/" + bookingData.telephoneNumber,
-          userData
-        )
-        .then((response) => {
-          if(response.status === HttpStatusCode.Ok){
-            setPaymentSuccess("payment made successfully")
-          }else{
-            setPaymentSuccess("")
-            setPaymentError("something went wrong,try again!!")
-          }
-          console.log(response.data);
-        });
+      axios.post(
+        "https://capstonehotels-production.up.railway.app/capstoneHotels/makePayment/" +
+          paymentDetails.phoneNumber,
+        userData
+      );
+      // .then((response) => {
+      //   console.log(response)
+      //   if(response.status === HttpStatusCode.Ok){
+      //     setPaymentSuccess("payment made successfully")
+      //   }else{
+      //     setPaymentSuccess("")
+      //     setPaymentError("something went wrong,try again!!")
+      //   }
+      //   console.log(response.data);
+      // });
+      alert("Payment succesful");
     } catch (error) {
       console.log(error.response);
     }
-   
+    setPaymentDetails({
+      fullName: "",
+      amount: "",
+    });
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -208,11 +231,17 @@ const validatePayment = () =>{
         <div className="card col-lg-8 col-md-8 col-sm-12">
           <h5>Enter Guest Information</h5>
           <p>Please fill out all the forms</p>
-          <form className="needs-validation" onSubmit={handleSubmit2}  novalidate >
+          <form
+            className="needs-validation"
+            onSubmit={handleSubmit2}
+            novalidate
+          >
             <div className="mb-3 ">
-              <label htmlFor="validationTooltip01" className="form-label">First Name</label>
+              <label htmlFor="validationTooltip01" className="form-label">
+                First Name
+              </label>
               <input
-                 minLength={4}
+                minLength={4}
                 name="firstName"
                 type="text"
                 className="form-control"
@@ -225,10 +254,11 @@ const validatePayment = () =>{
               <p className="error">{errorMessage}</p>
             </div>
             <div className="mb-3">
-              <label htmlfor="validationTooltip02"
-              className="form-label">Last Name</label>
+              <label htmlfor="validationTooltip02" className="form-label">
+                Last Name
+              </label>
               <input
-                 minLength={4}
+                minLength={4}
                 name="lastName"
                 type="text"
                 placeholder="Olamide"
@@ -238,13 +268,12 @@ const validatePayment = () =>{
                 onChange={handleChange2}
                 required
               />
-                <p className="error">{errorMessage}</p>
+              <p className="error">{errorMessage}</p>
             </div>
             <div className="mb-3">
               <label className="form-label">Email address</label>
-              
-              <input
 
+              <input
                 name="emailAddress"
                 type="text"
                 className="form-control "
@@ -255,7 +284,7 @@ const validatePayment = () =>{
                 onChange={handleChange2}
                 required
               />
-               <p className="error">{emailError}</p>
+              <p className="error">{emailError}</p>
               {/* <div id="email" className="form-text">We'll never share your email with anyone else.</div> */}
             </div>
             <div className="mb-3">
@@ -271,7 +300,7 @@ const validatePayment = () =>{
                 onChange={handleChange2}
                 required
               />
-                <p className="pt-3 error">{phoneError}</p>
+              <p className="pt-3 error">{phoneError}</p>
             </div>
             {/* <div className="col-4 my-4">
               <div className="dropdown">
@@ -342,23 +371,24 @@ const validatePayment = () =>{
               </div>
             </div> */}
             <label className="form-label">Room Type</label>
-              <input
-                name="roomType"
-                type="text"
-                className="form-control"
-                id="roomType"
-                placeholder="SINGLE"
-                aria-describedby="roomType"
-                value={roomType}
-                onChange={handleChange2}
-                required
-              />
+            <input
+              name="roomType"
+              type="text"
+              className="form-control"
+              id="roomType"
+              placeholder="SINGLE"
+              aria-describedby="roomType"
+              value={roomTyp}
+              onChange={handleChange2}
+              required
+            />
             <div className="form-group mb-3">
-              <label>Check-in time:</label>
+              <label>Check-in Date:</label>
               <input
                 type="date"
                 className="form-control"
                 id="checkin"
+                min={minDate}
                 name="checkinDate"
                 value={bookingData.checkinDate}
                 onChange={handleChange2}
@@ -366,24 +396,25 @@ const validatePayment = () =>{
               />
             </div>
             <div className="form-group mb-3">
-              <label>Check-out time:</label>
+              <label>Check-out Date:</label>
               <input
                 type="date"
                 className="form-control"
                 id="checkout"
+                min={minDate}
                 name="checkoutDate"
                 value={bookingData.checkoutDate}
                 onChange={handleChange2}
                 required
               />
-               <p className="pt-3 error">{checkDate}</p>
+              <p className="pt-3 error">{checkDate}</p>
             </div>
 
             <button type="submit" className="btn btn-danger">
               Proceed to pay
             </button>
-             <p className="success">{bookingSuccess}</p>
-             <p className="error">{bookingError}</p>
+            <p className="success">{bookingSuccess}</p>
+            <p className="error">{bookingError}</p>
           </form>
           <div className="mt-5"></div>
           {/* <h5>Enter Second Guest Information</h5>
@@ -473,7 +504,11 @@ const validatePayment = () =>{
             </div>
             <div className="card col-12 mt-5">
               <h5>Payment Detail</h5>
-              <form className="needs-validation" onSubmit={handleSubmit} novalidate>
+              <form
+                className="needs-validation"
+                onSubmit={handleSubmit}
+                novalidate
+              >
                 <div className="row">
                   <div className="col-12 mb-3">
                     <label className="form-label">Name</label>
@@ -482,7 +517,7 @@ const validatePayment = () =>{
                       type="text"
                       className="form-control"
                       id="fname"
-                      value={userData.name}
+                      value={paymentDetails.fullName}
                       onChange={handleChange}
                       required
                     />
@@ -494,11 +529,11 @@ const validatePayment = () =>{
                       type="number"
                       className="form-control"
                       id="amount"
-                      value={userData.amount}
+                      value={paymentDetails.amount}
                       onChange={handleChange}
                       required
                     />
-                    <div className="error">{amountError}</div>
+                    {/* <div className="error">{amountError}</div> */}
                   </div>
                   <div className="col-6 mb-3">
                     <label className="form-label">Description</label>
@@ -513,22 +548,22 @@ const validatePayment = () =>{
                     />
                     <div className="error">{descError}</div>
                   </div>
-                  
-                 
                 </div>
 
                 <button type="submit" className="btn btn-danger mb-3">
                   Pay Now
                 </button>
                 <p className="success">{paymentSuccess}</p>
-             <p className="error">{paymentError}</p>
+                <p className="error">{paymentError}</p>
               </form>
             </div>
             {/* cancel booking */}
             <div className="card col-12 mt-5">
               <h5>Cancel Booking / Update Booking</h5>
-              <p className="text-danger">Note that there is no refund when you cancel booking!!</p>
-              <form className="needs-validation" onSubmit={handleSubmitCancel} >
+              <p className="text-danger">
+                Note that there is no refund when you cancel booking!!
+              </p>
+              <form className="needs-validation" onSubmit={handleSubmitCancel}>
                 <div className="row">
                   <div className="col-12 mb-3 ">
                     <label className="form-label">Guest id</label>
@@ -542,15 +577,12 @@ const validatePayment = () =>{
                       required
                     />
                   </div>
-                  
                 </div>
 
                 <button type="submit" className="btn btn-danger mb-3">
                   Cancel Booking
                 </button>
-                <p className="pt-3 success">{paymentSuccess}</p>
               </form>
-              
             </div>
           </div>
         </div>
@@ -559,4 +591,3 @@ const validatePayment = () =>{
   );
 };
 export default Bookings;
-

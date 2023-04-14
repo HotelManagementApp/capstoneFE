@@ -7,6 +7,7 @@ const SmallButton = () => {
     const navToBooking = () =>{
         return(
             navigate("/Bookings")
+
         )
     }
     return (
