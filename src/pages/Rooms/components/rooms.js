@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import RoomCard from "../../RoomCard/components/roomCard";
 import Button from "../../../components/button";
 import "../styles/rooms.css";
